@@ -11,6 +11,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -68,8 +69,10 @@ public class CheckLibrary
         System.setProperty("webdriver.chrome.driver",
                            "/usr/local/bin/chromedriver");
         WebDriver driver = new ChromeDriver();
-
         driver.get(LIBRARY_URL);
+
+//        driver.manage().window().setPosition(new Point(0, 0));
+//        driver.manage().window().setSize(new Dimension(1000, 1000));
 
         for (int i = 0; i < aBooks.length; i++)
         {
@@ -87,6 +90,9 @@ public class CheckLibrary
                 System.out.println("ERROR: " + aBooks[i]);
                 System.out.println(e.toString());
                 listNotFound.add(aBooks[i]);
+                e.printStackTrace();
+//                File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+//                FileUtils.copyFile(scrFile, new File("~/Desktop/libScreenshot" + i + ".png"));
             }
 
             printStatistics(i + 1,
@@ -181,9 +187,11 @@ public class CheckLibrary
         listNotFound.add(book);
     }
 
-    private void search(BookInfo book, WebDriver driver) {
+    private void search(BookInfo book,
+                        WebDriver driver) {
         WebElement searchLink = driver.findElement(By.linkText("Tarkennettu haku"));
-        searchLink.click();
+        scrollAndClick(searchLink,
+                       driver);
 
         Select librarySelect = new Select(
             driver.findElement(By.name("organisationHierarchyPanel:organisationContainer:organisationChoice")));
@@ -214,7 +222,22 @@ waitSomeTime();
         }
 
         WebElement searchButton = driver.findElement(By.name("bottomButtonsContainer:bottomSearchButton"));
-        searchButton.click();
+        scrollAndClick(searchButton,
+                       driver);
+    }
+
+    private void scrollAndClick(WebElement element,
+                                WebDriver driver) {
+//        scrollToElement(element,
+//                        driver);
+        element.click();
+    }
+
+    private void scrollToElement(WebElement element,
+                                 WebDriver driver) {
+        Actions actions = new Actions(driver);
+        actions.moveToElement(element);
+        actions.perform();
     }
 
     private void waitSomeTime()
@@ -250,6 +273,8 @@ waitSomeTime();
         {
             return false;
         }
+        scrollAndClick(tampereAvailabilityLink,
+                       driver);
         tampereAvailabilityLink.click();
 
         waitForText(driver, "Tampereen pääkirjasto");
@@ -259,7 +284,8 @@ waitSomeTime();
         {
             return false;
         }
-        paakirjastoAvailabilityLink.click();
+        scrollAndClick(paakirjastoAvailabilityLink,
+                       driver);
 
         waitForText(driver, "Department:");
         WebElement availableCountElement =
