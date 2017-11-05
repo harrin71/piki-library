@@ -190,8 +190,8 @@ public class CheckLibrary
     private void search(BookInfo book,
                         WebDriver driver) {
         WebElement searchLink = driver.findElement(By.linkText("Tarkennettu haku"));
-        scrollAndClick(searchLink,
-                       driver);
+        scrollTop(driver);
+        searchLink.click();
 
         Select librarySelect = new Select(
             driver.findElement(By.name("organisationHierarchyPanel:organisationContainer:organisationChoice")));
@@ -226,10 +226,17 @@ waitSomeTime();
                        driver);
     }
 
+    private void scrollTop(WebDriver driver) {
+        scrollToElement(findElement(driver,
+                                    By.cssSelector(".custom-logo")),
+                        driver);
+
+    }
+
     private void scrollAndClick(WebElement element,
                                 WebDriver driver) {
-//        scrollToElement(element,
-//                        driver);
+        scrollToElement(element,
+                        driver);
         element.click();
     }
 
@@ -243,7 +250,7 @@ waitSomeTime();
     private void waitSomeTime()
     {
         try {
-            Thread.sleep(5000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -273,8 +280,9 @@ waitSomeTime();
         {
             return false;
         }
-        scrollAndClick(tampereAvailabilityLink,
-                       driver);
+//        scrollAndClick(tampereAvailabilityLink,
+//                       driver);
+        scrollToReview(driver);
         tampereAvailabilityLink.click();
 
         waitForText(driver, "Tampereen pääkirjasto");
@@ -284,6 +292,7 @@ waitSomeTime();
         {
             return false;
         }
+        scrollToReview(driver);
         scrollAndClick(paakirjastoAvailabilityLink,
                        driver);
 
@@ -337,6 +346,12 @@ waitSomeTime();
         }
 
         return true;
+    }
+
+    private void scrollToReview(WebDriver driver) {
+        scrollToElement(findElement(driver,
+                                    By.cssSelector(".arena-review-subtitle")),
+                        driver);
     }
 
     private WebElement findElement(WebDriver driver,
