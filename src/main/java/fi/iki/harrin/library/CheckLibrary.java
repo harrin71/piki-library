@@ -266,8 +266,9 @@ waitSomeTime();
         throws MalformedURLException, IOException, SAXException
     {
         waitForText(driver, "Hakutulos");
+        waitSomeTime();
 
-        List<WebElement> availabilityLinks = driver.findElements(By.linkText("Tarkista saatavuus"));
+        List<WebElement> availabilityLinks = driver.findElements(By.linkText("Saatavilla"));
         if (availabilityLinks == null
                 || availabilityLinks.isEmpty())
         {
