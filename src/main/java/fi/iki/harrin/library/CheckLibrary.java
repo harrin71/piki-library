@@ -70,6 +70,8 @@ public class CheckLibrary
                            "/usr/local/bin/chromedriver");
         WebDriver driver = new ChromeDriver();
         driver.get(LIBRARY_URL);
+//        WebElement localeLink = driver.findElement(By.linkText("FI"));
+//        localeLink.click();
 
 //        driver.manage().window().setPosition(new Point(0, 0));
 //        driver.manage().window().setSize(new Dimension(1000, 1000));
@@ -201,11 +203,11 @@ public class CheckLibrary
 
         Select categorySelect = new Select(
             driver.findElement(By.name("materialPanel:mediaClassContainer:mediaClassChoice")));
-        categorySelect.selectByVisibleText("Book");
+        categorySelect.selectByVisibleText("Kirja");
 
         Select titleSelect = new Select(
             driver.findElement(By.name("freeTextFieldsContainer:freeTextView:0:freeTextPanel:freeTextTypeChoice")));
-        titleSelect.selectByVisibleText("Title");
+        titleSelect.selectByVisibleText("Teos");
         WebElement titleField =
              driver.findElement(By.name("freeTextFieldsContainer:freeTextView:0:freeTextPanel:freeTextField"));
         titleField.sendKeys(book.getTitle());
@@ -214,7 +216,7 @@ public class CheckLibrary
         {
             Select authorSelect = new Select(
                 driver.findElement(By.name("freeTextFieldsContainer:freeTextView:1:freeTextPanel:freeTextTypeChoice")));
-            authorSelect.selectByVisibleText("Author");
+            authorSelect.selectByVisibleText("Tekijä");
 waitSomeTime();
             WebElement authorField =
                 driver.findElement(By.name("freeTextFieldsContainer:freeTextView:1:freeTextPanel:freeTextField"));
@@ -263,7 +265,7 @@ waitSomeTime();
                                    WebDriver driver)
         throws MalformedURLException, IOException, SAXException
     {
-        waitForText(driver, "Search results");
+        waitForText(driver, "Hakutulos");
 
         List<WebElement> availabilityLinks = driver.findElements(By.linkText("Tarkista saatavuus"));
         if (availabilityLinks == null
@@ -296,7 +298,7 @@ waitSomeTime();
         scrollAndClick(paakirjastoAvailabilityLink,
                        driver);
 
-        waitForText(driver, "Department:");
+        waitForText(driver, "Osasto:");
         WebElement availableCountElement =
             findElement(driver,
                         By.xpath("//span[text()='Tampereen pääkirjasto']/../../following-sibling::div[@class='arena-holding-child-hyper-container']"
@@ -370,7 +372,7 @@ waitSomeTime();
     private void waitForText(WebDriver driver,
                              final String text)
     {
-        final By by = By.xpath("//span[text() = '" + text + "']");
+        final By by = By.xpath("//span[contains(text(), '" + text + "')]");
         waitForElement(driver,
                        by);
     }
